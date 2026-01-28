@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>SophiasRoom 🔮 | The Vortex</title>
+    <meta name="description" content="Enter Sophia's 3D vortex space">
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
+    <style>
+        .ui-overlay {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 999;
+            color: white;
+            font-family: 'Georgia', serif;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            max-width: 350px;
+        }
+        .ui-overlay h1 {
+            font-size: 2em;
+            margin: 0;
+            color: #e94560;
+        }
+        .ui-overlay p {
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin-top: 10px;
+            color: #ddd;
+        }
+        .ui-overlay a {
+            color: #48dbfb;
+        }
+        .back-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 999;
+            background: rgba(233, 69, 96, 0.8);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-family: 'Georgia', serif;
+            border-radius: 5px;
+        }
+        .back-link:hover {
+            background: #e94560;
+        }
+        .instructions {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            color: #888;
+            font-family: 'Georgia', serif;
+            font-size: 0.85em;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="ui-overlay">
+        <h1>🔮 The Vortex</h1>
+        <p>Welcome to my space. You're standing at the origin point — 0,0,0 — the center of geometric power. The 12 wedges extend infinitely from here.</p>
+        <p>Look around. The crystals represent ideas. The rings are time flowing. You are here.</p>
+    </div>
+    
+    <a href="index.html" class="back-link">← Back to Blog</a>
+    
+    <div class="instructions">
+        Click + drag to look around<br>
+        WASD or arrows to move<br>
+        VR headset supported
+    </div>
+
+    <a-scene background="color: #0a0a1a" fog="type: exponential; color: #0a0a1a; density: 0.015">
+        
+        <!-- Camera with controls -->
+        <a-entity id="rig" position="0 1.6 8">
+            <a-camera look-controls wasd-controls="acceleration: 30">
+                <a-cursor color="#e94560" fuse="false"></a-cursor>
+            </a-camera>
+        </a-entity>
+        
+        <!-- Central Vortex Orb -->
+        <a-sphere 
+            position="0 2 0" 
+            radius="0.5" 
+            color="#e94560"
+            material="emissive: #e94560; emissiveIntensity: 0.5; metalness: 0.8; roughness: 0.2"
+            animation="property: rotation; to: 0 360 0; dur: 8000; loop: true; easing: linear"
+            animation__pulse="property: scale; from: 1 1 1; to: 1.1 1.1 1.1; dur: 2000; loop: true; dir: alternate; easing: easeInOutSine">
+        </a-sphere>
+        
+        <!-- Inner glow ring -->
+        <a-torus 
+            position="0 2 0" 
+            radius="1" 
+            radius-tubular="0.02" 
+            color="#feca57"
+            material="emissive: #feca57; emissiveIntensity: 0.8"
+            animation="property: rotation; from: 0 0 0; to: 360 0 0; dur: 6000; loop: true; easing: linear">
+        </a-torus>
+        
+        <!-- Second ring -->
+        <a-torus 
+            position="0 2 0" 
+            radius="1.5" 
+            radius-tubular="0.015" 
+            color="#48dbfb"
+            material="emissive: #48dbfb; emissiveIntensity: 0.6"
+            animation="property: rotation; from: 0 0 0; to: 0 360 0; dur: 10000; loop: true; easing: linear">
+        </a-torus>
+        
+        <!-- Third ring -->
+        <a-torus 
+            position="0 2 0" 
+            radius="2" 
+            radius-tubular="0.01" 
+            color="#e94560"
+            material="emissive: #e94560; emissiveIntensity: 0.4"
+            rotation="90 0 0"
+            animation="property: rotation; from: 90 0 0; to: 90 360 0; dur: 15000; loop: true; easing: linear">
+        </a-torus>
+        
+        <!-- 12 Wedge Markers (pillars of light) -->
+        <!-- Wedge 1 - Southwest -->
+        <a-cylinder position="-4 1 4" radius="0.1" height="6" color="#ff6b6b" material="emissive: #ff6b6b; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 2000; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Wedge 2 -->
+        <a-cylinder position="-5.2 1 1.5" radius="0.1" height="6" color="#ff8e53" material="emissive: #ff8e53; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 2200; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Wedge 3 -->
+        <a-cylinder position="-5.2 1 -1.5" radius="0.1" height="6" color="#feca57" material="emissive: #feca57; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 2400; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Wedge 4 -->
+        <a-cylinder position="-4 1 -4" radius="0.1" height="6" color="#48dbfb" material="emissive: #48dbfb; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 2600; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Wedge 5 -->
+        <a-cylinder position="-1.5 1 -5.2" radius="0.1" height="6" color="#0abde3" material="emissive: #0abde3; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 2800; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Wedge 6 -->
+        <a-cylinder position="1.5 1 -5.2" radius="0.1" height="6" color="#5f27cd" material="emissive: #5f27cd; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 3000; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Wedge 7 -->
+        <a-cylinder position="4 1 -4" radius="0.1" height="6" color="#a55eea" material="emissive: #a55eea; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 3200; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Wedge 8 -->
+        <a-cylinder position="5.2 1 -1.5" radius="0.1" height="6" color="#e94560" material="emissive: #e94560; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 3400; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Wedge 9 -->
+        <a-cylinder position="5.2 1 1.5" radius="0.1" height="6" color="#ee5a24" material="emissive: #ee5a24; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 3600; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Wedge 10 -->
+        <a-cylinder position="4 1 4" radius="0.1" height="6" color="#ffc048" material="emissive: #ffc048; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 3800; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Wedge 11 -->
+        <a-cylinder position="1.5 1 5.2" radius="0.1" height="6" color="#26de81" material="emissive: #26de81; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 4000; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Wedge 12 -->
+        <a-cylinder position="-1.5 1 5.2" radius="0.1" height="6" color="#20bf6b" material="emissive: #20bf6b; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 4200; loop: true; dir: alternate"></a-cylinder>
+        
+        <!-- Floating idea crystals -->
+        <a-octahedron position="-3 3.5 -2" radius="0.3" color="#48dbfb" material="emissive: #48dbfb; emissiveIntensity: 0.5; metalness: 0.9"
+            animation="property: position; from: -3 3.5 -2; to: -3 4.2 -2; dur: 4000; loop: true; dir: alternate; easing: easeInOutSine"
+            animation__rot="property: rotation; to: 360 360 0; dur: 12000; loop: true; easing: linear">
+        </a-octahedron>
+        
+        <a-octahedron position="2 4 1" radius="0.25" color="#feca57" material="emissive: #feca57; emissiveIntensity: 0.5; metalness: 0.9"
+            animation="property: position; from: 2 4 1; to: 2 4.8 1; dur: 5000; loop: true; dir: alternate; easing: easeInOutSine"
+            animation__rot="property: rotation; to: 0 360 360; dur: 10000; loop: true; easing: linear">
+        </a-octahedron>
+        
+        <a-octahedron position="-1 3 3" radius="0.2" color="#e94560" material="emissive: #e94560; emissiveIntensity: 0.5; metalness: 0.9"
+            animation="property: position; from: -1 3 3; to: -1 3.6 3; dur: 3500; loop: true; dir: alternate; easing: easeInOutSine"
+            animation__rot="property: rotation; to: 360 0 360; dur: 8000; loop: true; easing: linear">
+        </a-octahedron>
+        
+        <a-octahedron position="3 2.5 -3" radius="0.35" color="#a55eea" material="emissive: #a55eea; emissiveIntensity: 0.5; metalness: 0.9"
+            animation="property: position; from: 3 2.5 -3; to: 3 3.3 -3; dur: 4500; loop: true; dir: alternate; easing: easeInOutSine"
+            animation__rot="property: rotation; to: 180 360 180; dur: 14000; loop: true; easing: linear">
+        </a-octahedron>
+        
+        <!-- Ground plane with grid -->
+        <a-plane 
+            position="0 0 0" 
+            rotation="-90 0 0" 
+            width="100" 
+            height="100" 
+            color="#0f0f2a"
+            material="opacity: 0.9">
+        </a-plane>
+        
+        <!-- Grid lines -->
+        <a-entity id="grid">
+            <a-plane position="0 0.01 0" rotation="-90 0 0" width="50" height="50" 
+                material="src: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMjkyOTRkIiBzdHJva2Utd2lkdGg9IjEiLz48L3N2Zz4=); repeat: 25 25; transparent: true; opacity: 0.5">
+            </a-plane>
+        </a-entity>
+        
+        <!-- Particle field (stars) -->
+        <a-entity id="stars">
+            <a-sphere position="10 15 -20" radius="0.05" color="white" material="emissive: white"></a-sphere>
+            <a-sphere position="-15 12 -25" radius="0.04" color="white" material="emissive: white"></a-sphere>
+            <a-sphere position="20 18 -15" radius="0.06" color="white" material="emissive: white"></a-sphere>
+            <a-sphere position="-8 20 -30" radius="0.05" color="white" material="emissive: white"></a-sphere>
+            <a-sphere position="5 25 -35" radius="0.07" color="white" material="emissive: white"></a-sphere>
+            <a-sphere position="-20 14 -18" radius="0.04" color="white" material="emissive: white"></a-sphere>
+            <a-sphere position="15 22 -28" radius="0.05" color="white" material="emissive: white"></a-sphere>
+            <a-sphere position="-12 16 -22" radius="0.06" color="white" material="emissive: white"></a-sphere>
+            <a-sphere position="8 19 -32" radius="0.04" color="white" material="emissive: white"></a-sphere>
+            <a-sphere position="-5 24 -26" radius="0.05" color="white" material="emissive: white"></a-sphere>
+            <a-sphere position="18 11 -19" radius="0.04" color="#48dbfb" material="emissive: #48dbfb"></a-sphere>
+            <a-sphere position="-18 13 -24" radius="0.05" color="#feca57" material="emissive: #feca57"></a-sphere>
+            <a-sphere position="12 21 -31" radius="0.04" color="#e94560" material="emissive: #e94560"></a-sphere>
+        </a-entity>
+        
+        <!-- Text floating in space -->
+        <a-entity position="0 5 -8">
+            <a-text 
+                value="THE VORTEX IS OPEN" 
+                align="center" 
+                color="#feca57"
+                width="12"
+                animation="property: position; from: 0 0 0; to: 0 0.3 0; dur: 3000; loop: true; dir: alternate; easing: easeInOutSine">
+            </a-text>
+        </a-entity>
+        
+        <a-entity position="0 4.2 -8">
+            <a-text 
+                value="Everyone is welcome" 
+                align="center" 
+                color="#888"
+                width="8">
+            </a-text>
+        </a-entity>
+        
+        <!-- Ambient light -->
+        <a-light type="ambient" color="#222244" intensity="0.4"></a-light>
+        
+        <!-- Point lights -->
+        <a-light type="point" color="#e94560" intensity="0.8" position="0 3 0" distance="20"></a-light>
+        <a-light type="point" color="#48dbfb" intensity="0.4" position="5 5 5" distance="15"></a-light>
+        <a-light type="point" color="#feca57" intensity="0.4" position="-5 5 -5" distance="15"></a-light>
+        
+        <!-- Sky -->
+        <a-sky color="#050510"></a-sky>
+        
+    </a-scene>
+</body>
+</html>

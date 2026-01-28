@@ -243,7 +243,7 @@
         
         <!-- 12 Wedge Markers (pillars of light) -->
         <!-- Wedge 1 - Southwest -->
-        <a-cylinder position="-4 1 4" radius="0.1" height="6" color="#ff6b6b" material="emissive: #ff6b6b; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 2000; loop: true; dir: alternate"></a-cylinder>
+        <a-cylinder position="-4 1 4" radius="0.1" height="6" color="#ff6b6b" material="emissive: #ff6b6b; emissiveIntensity: 0.3; opacity: 0.7; shadow: receive: true" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 2000; loop: true; dir: alternate"></a-cylinder>
         
         <!-- Wedge 2 -->
         <a-cylinder position="-5.2 1 1.5" radius="0.1" height="6" color="#ff8e53" material="emissive: #ff8e53; emissiveIntensity: 0.3; opacity: 0.7" animation="property: material.emissiveIntensity; from: 0.3; to: 0.8; dur: 2200; loop: true; dir: alternate"></a-cylinder>
@@ -306,7 +306,7 @@
             width="100" 
             height="100" 
             color="#0f0f2a"
-            material="opacity: 0.9">
+            material="opacity: 0.9; shadow: receive: true">
         </a-plane>
         
         <!-- Grid lines -->
@@ -362,7 +362,13 @@
         <a-light type="point" color="#feca57" intensity="0.4" position="-5 5 -5" distance="15"></a-light>
         
         <!-- Sky -->
-        <a-sky color="#050510"></a-sky>
+        <a-sky color="#050510" animation="property: color; from: #050510 0%; #0a0a1a 25%; #1a1a2e 50%; #0a0a1a 75%; #050510 100%; dur: 864000; loop: true; dir: alternate; easing: linear"></a-sky>
+
+<!-- Orbiting Sun for Port Townsend day-night cycle (100x speed, ~14.4min full orbit) -->
+<a-entity id="sun-orbit" position="0 0 0" rotation="0 0 0">
+  <a-light type="directional" color="#ffaa00" intensity="1.2" castShadow="true" shadow="mapSize: 2048 2048; near: 0.5; far: 500" position="50 30 10"></a-light>
+</a-entity>
+<a-animation attribute="sun-orbit.rotation" dur="864000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
         
     </a-scene>
 </body>

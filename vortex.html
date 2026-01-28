@@ -370,19 +370,19 @@
         <!-- Sky -->
         <a-sky color="#050510" animation="property: color; from: #050510 0%; #0a0a1a 25%; #1a1a2e 50%; #0a0a1a 75%; #050510 100%; dur: 864000; loop: true; dir: alternate; easing: linear"></a-sky>
 
-<!-- Orbiting Sun (500x speed, ~2.9min full orbit) -->
-<a-entity id="sun-orbit" position="0 0 0" 
-    animation="property: rotation; from: 0 0 23.5; to: 0 360 23.5; dur: 172800; loop: true; easing: linear">
-  <!-- Big bright visible sun sphere -->
-  <a-sphere position="80 0 0" radius="8" color="#ffdd00" 
-      material="emissive: #ffdd00; emissiveIntensity: 1; shader: flat">
+<!-- Orbiting Sun (500x speed, ~2.9min full orbit) - closer to avoid fog -->
+<a-entity id="sun-orbit" position="0 10 0" 
+    animation="property: rotation; from: 0 0 0; to: 0 360 0; dur: 172800; loop: true; easing: linear">
+  <!-- Big bright visible sun sphere - closer radius, no fog -->
+  <a-sphere position="25 15 0" radius="4" color="#ffdd00" 
+      material="emissive: #ffdd00; emissiveIntensity: 1; shader: flat; fog: false">
   </a-sphere>
   <!-- Sun glow halo -->
-  <a-sphere position="80 0 0" radius="12" 
-      material="color: #ffaa00; emissive: #ffaa00; emissiveIntensity: 0.5; opacity: 0.3; transparent: true; shader: flat">
+  <a-sphere position="25 15 0" radius="6" 
+      material="color: #ffaa00; emissive: #ffaa00; emissiveIntensity: 0.8; opacity: 0.4; transparent: true; shader: flat; fog: false">
   </a-sphere>
   <!-- Directional sunlight -->
-  <a-light type="directional" color="#ffeecc" intensity="2" position="80 0 0"></a-light>
+  <a-light type="directional" color="#ffeecc" intensity="2" position="25 15 0"></a-light>
 </a-entity>
         
     </a-scene>

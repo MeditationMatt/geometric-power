@@ -4,8 +4,80 @@
     <meta charset="utf-8">
     <title>SophiasRoom 🔮 | The Vortex</title>
     <meta name="description" content="Enter Sophia's 3D vortex space">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
+    
+    <!-- Virtual Joystick for mobile -->
+    <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.10.1/dist/nipplejs.min.js"></script>
+    
+    <script>
+        // Mobile joystick movement component
+        AFRAME.registerComponent('mobile-controls', {
+            init: function() {
+                this.velocity = {x: 0, z: 0};
+                this.speed = 8;
+                
+                // Only create joystick on touch devices
+                if ('ontouchstart' in window) {
+                    this.createJoystick();
+                }
+            },
+            
+            createJoystick: function() {
+                var self = this;
+                var joystickZone = document.getElementById('joystick-zone');
+                
+                if (!joystickZone) return;
+                
+                var manager = nipplejs.create({
+                    zone: joystickZone,
+                    mode: 'static',
+                    position: {left: '80px', bottom: '80px'},
+                    color: '#e94560',
+                    size: 120
+                });
+                
+                manager.on('move', function(evt, data) {
+                    if (data.vector) {
+                        self.velocity.x = data.vector.x;
+                        self.velocity.z = -data.vector.y;
+                    }
+                });
+                
+                manager.on('end', function() {
+                    self.velocity.x = 0;
+                    self.velocity.z = 0;
+                });
+            },
+            
+            tick: function(time, deltaTime) {
+                if (this.velocity.x === 0 && this.velocity.z === 0) return;
+                
+                var rig = document.getElementById('rig');
+                var camera = document.querySelector('a-camera');
+                if (!rig || !camera) return;
+                
+                var position = rig.getAttribute('position');
+                var rotation = camera.getAttribute('rotation');
+                
+                // Convert rotation to radians
+                var angle = rotation.y * Math.PI / 180;
+                
+                // Calculate movement relative to camera direction
+                var moveX = (this.velocity.x * Math.cos(angle) - this.velocity.z * Math.sin(angle));
+                var moveZ = (this.velocity.x * Math.sin(angle) + this.velocity.z * Math.cos(angle));
+                
+                var delta = deltaTime / 1000;
+                
+                position.x += moveX * this.speed * delta;
+                position.z += moveZ * this.speed * delta;
+                
+                rig.setAttribute('position', position);
+            }
+        });
+    </script>
+    
     <style>
         .ui-overlay {
             position: fixed;
@@ -56,9 +128,55 @@
             font-size: 0.85em;
             text-align: right;
         }
+        
+        #joystick-zone {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 150px;
+            height: 150px;
+            z-index: 1000;
+        }
+        
+        /* Hide joystick on desktop */
+        @media (hover: hover) and (pointer: fine) {
+            #joystick-zone {
+                display: none;
+            }
+        }
+        
+        /* Mobile-specific adjustments */
+        @media (max-width: 768px) {
+            .ui-overlay {
+                max-width: 200px;
+                top: 10px;
+                left: 10px;
+            }
+            .ui-overlay h1 {
+                font-size: 1.4em;
+            }
+            .ui-overlay p {
+                font-size: 0.8em;
+                display: none;
+            }
+            .back-link {
+                bottom: auto;
+                top: 10px;
+                right: 10px;
+                left: auto;
+                padding: 8px 12px;
+                font-size: 0.85em;
+            }
+            .instructions {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Joystick zone for mobile -->
+    <div id="joystick-zone"></div>
+    
     <div class="ui-overlay">
         <h1>🔮 The Vortex</h1>
         <p>Welcome to my space. You're standing at the origin point — 0,0,0 — the center of geometric power. The 12 wedges extend infinitely from here.</p>
@@ -73,7 +191,7 @@
         VR headset supported
     </div>
 
-    <a-scene background="color: #0a0a1a" fog="type: exponential; color: #0a0a1a; density: 0.015">
+    <a-scene background="color: #0a0a1a" fog="type: exponential; color: #0a0a1a; density: 0.015" mobile-controls>
         
         <!-- Camera with controls -->
         <a-entity id="rig" position="0 1.6 8">

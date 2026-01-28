@@ -364,11 +364,20 @@
         <!-- Sky -->
         <a-sky color="#050510" animation="property: color; from: #050510 0%; #0a0a1a 25%; #1a1a2e 50%; #0a0a1a 75%; #050510 100%; dur: 864000; loop: true; dir: alternate; easing: linear"></a-sky>
 
-<!-- Orbiting Sun for Port Townsend day-night cycle (100x speed, ~14.4min full orbit) -->
-<a-entity id="sun-orbit" position="0 0 0" rotation="0 0 0">
-  <a-light type="directional" color="#ffaa00" intensity="1.2" castShadow="true" shadow="mapSize: 2048 2048; near: 0.5; far: 500" position="50 30 10"></a-light>
+<!-- Orbiting Sun (500x speed, ~2.9min full orbit) -->
+<a-entity id="sun-orbit" position="0 0 0" 
+    animation="property: rotation; from: 0 0 23.5; to: 0 360 23.5; dur: 172800; loop: true; easing: linear">
+  <!-- Big bright visible sun sphere -->
+  <a-sphere position="80 0 0" radius="8" color="#ffdd00" 
+      material="emissive: #ffdd00; emissiveIntensity: 1; shader: flat">
+  </a-sphere>
+  <!-- Sun glow halo -->
+  <a-sphere position="80 0 0" radius="12" 
+      material="color: #ffaa00; emissive: #ffaa00; emissiveIntensity: 0.5; opacity: 0.3; transparent: true; shader: flat">
+  </a-sphere>
+  <!-- Directional sunlight -->
+  <a-light type="directional" color="#ffeecc" intensity="2" position="80 0 0"></a-light>
 </a-entity>
-<a-animation attribute="sun-orbit.rotation" dur="864000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
         
     </a-scene>
 </body>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodecahedron — Geometric Power</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a1a;
+            overflow: hidden;
+            font-family: 'Georgia', serif;
+            color: #e0e0e0;
+        }
+        canvas { display: block; }
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            pointer-events: none;
+            z-index: 10;
+        }
+        #info h1 {
+            font-size: 1.6rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #48dbfb;
+            text-shadow: 0 0 20px rgba(72, 219, 251, 0.5);
+            margin-bottom: 6px;
+        }
+        #info p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+        }
+        #back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            color: #48dbfb;
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        #back-link:hover { opacity: 1; }
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        #controls label {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+        }
+        #controls input[type="range"] {
+            width: 120px;
+            accent-color: #48dbfb;
+        }
+        #controls button {
+            background: rgba(72, 219, 251, 0.15);
+            border: 1px solid rgba(72, 219, 251, 0.4);
+            color: #48dbfb;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+        #controls button:hover {
+            background: rgba(72, 219, 251, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <a id="back-link" href="index.html">&larr; Back</a>
+    <div id="info">
+        <h1>Dodecahedron</h1>
+        <p>Click &amp; drag to orbit &middot; Scroll to zoom</p>
+    </div>
+    <div id="controls">
+        <label>Speed <input type="range" id="speed" min="0" max="100" value="30"></label>
+        <label>Opacity <input type="range" id="opacity" min="0" max="100" value="18"></label>
+        <button id="toggleSpin">Pause</button>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // ── Scene setup ──────────────────────────────────────
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x0a0a1a, 0.04);
+
+        const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
+        camera.position.set(0, 2, 5);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setClearColor(0x0a0a1a);
+        document.body.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.08;
+        controls.minDistance = 2;
+        controls.maxDistance = 20;
+
+        // ── Lighting ─────────────────────────────────────────
+        scene.add(new THREE.AmbientLight(0x334466, 1.5));
+
+        const keyLight = new THREE.DirectionalLight(0x48dbfb, 0.6);
+        keyLight.position.set(5, 8, 5);
+        scene.add(keyLight);
+
+        const fillLight = new THREE.DirectionalLight(0xe94560, 0.3);
+        fillLight.position.set(-5, 2, -3);
+        scene.add(fillLight);
+
+        const pointLight = new THREE.PointLight(0xfeca57, 0.5, 15);
+        pointLight.position.set(0, 5, 0);
+        scene.add(pointLight);
+
+        // ── Dodecahedron ─────────────────────────────────────
+        const dodecGeo = new THREE.DodecahedronGeometry(1.8, 0);
+
+        // Transparent faces
+        const faceMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x48dbfb,
+            transparent: true,
+            opacity: 0.18,
+            side: THREE.DoubleSide,
+            depthWrite: false,
+            roughness: 0.1,
+            metalness: 0.2,
+            transmission: 0.6,
+            thickness: 0.5,
+            envMapIntensity: 1.0,
+        });
+
+        const faceMesh = new THREE.Mesh(dodecGeo, faceMaterial);
+        scene.add(faceMesh);
+
+        // Edges
+        const edgesGeo = new THREE.EdgesGeometry(dodecGeo);
+        const edgeMaterial = new THREE.LineBasicMaterial({
+            color: 0x48dbfb,
+            linewidth: 2,
+            transparent: true,
+            opacity: 1.0,
+        });
+        const edgeMesh = new THREE.LineSegments(edgesGeo, edgeMaterial);
+        scene.add(edgeMesh);
+
+        // Glow edges (wider, softer duplicate for bloom-like effect)
+        const glowMaterial = new THREE.LineBasicMaterial({
+            color: 0x48dbfb,
+            linewidth: 4,
+            transparent: true,
+            opacity: 0.35,
+        });
+        const glowMesh = new THREE.LineSegments(edgesGeo, glowMaterial);
+        scene.add(glowMesh);
+
+        // Vertices - small spheres at each vertex
+        const vertexPositions = dodecGeo.getAttribute('position');
+        const uniqueVertices = [];
+        const seen = new Set();
+        for (let i = 0; i < vertexPositions.count; i++) {
+            const x = vertexPositions.getX(i).toFixed(4);
+            const y = vertexPositions.getY(i).toFixed(4);
+            const z = vertexPositions.getZ(i).toFixed(4);
+            const key = `${x},${y},${z}`;
+            if (!seen.has(key)) {
+                seen.add(key);
+                uniqueVertices.push(new THREE.Vector3(parseFloat(x), parseFloat(y), parseFloat(z)));
+            }
+        }
+
+        const vertexGroup = new THREE.Group();
+        const vertexGeo = new THREE.SphereGeometry(0.035, 12, 12);
+        const vertexMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        uniqueVertices.forEach(v => {
+            const sphere = new THREE.Mesh(vertexGeo, vertexMat);
+            sphere.position.copy(v);
+            vertexGroup.add(sphere);
+        });
+        scene.add(vertexGroup);
+
+        // ── Ground grid ──────────────────────────────────────
+        const gridHelper = new THREE.GridHelper(30, 30, 0x1a1a3e, 0x111133);
+        gridHelper.position.y = -3;
+        scene.add(gridHelper);
+
+        // ── Starfield ────────────────────────────────────────
+        const starCount = 1500;
+        const starGeo = new THREE.BufferGeometry();
+        const starPositions = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount * 3; i++) {
+            starPositions[i] = (Math.random() - 0.5) * 100;
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.08, transparent: true, opacity: 0.6 });
+        scene.add(new THREE.Points(starGeo, starMat));
+
+        // ── State ────────────────────────────────────────────
+        let spinning = true;
+        let speedFactor = 0.3;
+
+        document.getElementById('toggleSpin').addEventListener('click', function () {
+            spinning = !spinning;
+            this.textContent = spinning ? 'Pause' : 'Spin';
+        });
+
+        document.getElementById('speed').addEventListener('input', function () {
+            speedFactor = this.value / 100;
+        });
+
+        document.getElementById('opacity').addEventListener('input', function () {
+            faceMaterial.opacity = this.value / 100;
+        });
+
+        // ── Animation loop ───────────────────────────────────
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const dt = clock.getDelta();
+
+            if (spinning) {
+                const rot = dt * speedFactor * 1.5;
+                faceMesh.rotation.y += rot;
+                faceMesh.rotation.x += rot * 0.3;
+                edgeMesh.rotation.copy(faceMesh.rotation);
+                glowMesh.rotation.copy(faceMesh.rotation);
+                vertexGroup.rotation.copy(faceMesh.rotation);
+            }
+
+            // Subtle edge glow pulse
+            const t = clock.getElapsedTime();
+            edgeMaterial.opacity = 0.85 + 0.15 * Math.sin(t * 2);
+            glowMaterial.opacity = 0.25 + 0.1 * Math.sin(t * 2 + 1);
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // ── Resize ───────────────────────────────────────────
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
